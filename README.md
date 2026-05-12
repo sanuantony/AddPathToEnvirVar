@@ -1,5 +1,7 @@
 # 📦 pathctl
 
+[![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+
 A safe, minimal CLI tool to manage your Windows PATH environment variable.
 
 Unlike `setx` or manual registry edits, **pathctl** focuses on:
@@ -166,18 +168,10 @@ src/
 | `winreg`       | Windows registry access                |
 | `windows-sys`  | `SendMessageTimeoutW` for env broadcast|
 
-## 🐛 Known Limitations
-
-- **REG_EXPAND_SZ** — The registry write currently stores PATH as `REG_SZ` instead of `REG_EXPAND_SZ`. This means `%VARIABLE%` references in existing PATH entries will be expanded and lost on write-back.
-- **Registry write access for read-only commands** — `list` and `backup` open the registry key with write permissions, so `pathctl list --scope system` may fail without admin even though it only reads.
-- No `--version` flag.
-
-## 🔧 Future Ideas
+##  Future Ideas
 
 - JSON output (`--json`)
 - PATH diff preview
 - Cross-platform support (Linux/macOS)
 - Deduplicate existing PATH entries
 - Reorder entries
-- Write PATH as `REG_EXPAND_SZ` to preserve `%VAR%` references
-- Use read-only registry access for `list` and `backup` commands

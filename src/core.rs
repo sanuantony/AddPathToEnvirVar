@@ -24,8 +24,17 @@ pub fn resolve_input_path(input: &str) -> Result<PathBuf, Box<dyn std::error::Er
     };
 
     match abs.canonicalize() {
-        Ok(p) => Ok(p),
+        Ok(p) => Ok(strip_unc_prefix(p)),
         Err(_) => Ok(abs),
+    }
+}
+
+fn strip_unc_prefix(p: PathBuf) -> PathBuf {
+    let s = p.to_string_lossy();
+    if s.starts_with(r"\\?\") {
+        PathBuf::from(&s[4..])
+    } else {
+        p
     }
 }
 
@@ -71,6 +80,12 @@ fn expand_windows_env_vars(input: &str) -> String {
 
 pub fn normalize_for_compare(path: &Path) -> String {
     let mut s = path.to_string_lossy().to_string();
+
+    if s.starts_with(r"\\?\") {
+        s = s[4..].to_string();
+    }
+
+    s = expand_windows_env_vars(&s);
 
     while s.ends_with('\\') || s.ends_with('/') {
         if s.len() <= 3 {

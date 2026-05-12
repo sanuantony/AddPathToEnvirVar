@@ -2,6 +2,7 @@ use clap::{Parser, Subcommand, ValueEnum};
 
 #[derive(Parser)]
 #[command(name = "pathctl")]
+#[command(version)]
 #[command(about = "Safe PATH editor")]
 pub struct Cli {
     #[command(subcommand)]
